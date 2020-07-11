@@ -1,0 +1,13 @@
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\bin\Release\JogoGourmet.exe.config
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\bin\Release\JogoGourmet.exe
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\bin\Release\JogoGourmet.pdb
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\bin\Release\System.Runtime.dll
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.Views.frmOPratoEh.resources
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.Views.frmJogoGourmet.resources
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.Properties.Resources.resources
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.Views.frmQualPrato.resources
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.csproj.GenerateResource.cache
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.csproj.CoreCompileInputs.cache
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.csproj.CopyComplete
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.exe
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.pdb
