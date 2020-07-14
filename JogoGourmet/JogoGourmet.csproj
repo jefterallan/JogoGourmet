@@ -50,7 +50,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Business\JogoGourmetBusiness_Dictionary.cs" />
     <Compile Include="Models\Pratos.cs" />
     <Compile Include="Views\OPratoEh.cs">
       <SubType>Form</SubType>

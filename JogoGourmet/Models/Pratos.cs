@@ -6,5 +6,6 @@ namespace JogoGourmet.Models
     {
         public string Tipo { get; set; }
         public List<string> Prato { get; set; }
+        public bool EhDerivado { get; set; }
     }
 }

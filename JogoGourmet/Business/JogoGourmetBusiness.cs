@@ -1,6 +1,7 @@
 ﻿using JogoGourmet.Business.Commons;
 using JogoGourmet.Models;
 using JogoGourmet.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -11,51 +12,158 @@ namespace JogoGourmet.Business
 
     public class JogoGourmetBusiness
     {
-        private List<Pratos> _pratosPensados { get; set; }
-        private TextMessages _textMessages { get; set; }
         private frmQualPrato _frmQualPrato { get; set; }
         private frmOPratoEh _frmOPratoEh { get; set; }
 
+        private TextMessages _textMessages { get; set; }
+
+        private List<Pratos> _pratosPrincipais { get; set; }
+        private List<Pratos> _pratosPensados { get; set; }
+
+        private int _numeroPratoAtual { get; set; }
+        private int _quantidadeDePratos { get; set; }
+        private int _qtdPratosPenDerivados { get; set; }
+
+        private bool _ehDerivado { get; set; } = false;
+        private bool _ehFimDeJogo { get; set; } = false;
+
+        private string _ultimoPrato { get; set; } = string.Empty;
+
         public JogoGourmetBusiness()
         {
-            _pratosPensados = new List<Pratos>();
-            _pratosPensados.Add(new Pratos() { Tipo = "massa", Prato = new List<string>() { "Lasanha" } });
-            _pratosPensados.Add(new Pratos() { Tipo = "bolo", Prato = new List<string>() { "Bolo de Chocolate" } });
-                        
             _textMessages = new TextMessages();
+            _pratosPrincipais = new List<Pratos>();
+            _pratosPensados = new List<Pratos>();
+            _pratosPrincipais.Add(new Pratos() { Tipo = "massa", Prato = new List<string>() { "Lasanha" }, EhDerivado = true });
+            _pratosPrincipais.Add(new Pratos() { Tipo = "Bolo de Chocolate", EhDerivado = false });
         }
 
         public void ExibePopUp()
         {
-            var quantidadeDePratos = _pratosPensados.Count;
-            var numeroPratoAtual = 1;
-            var ultimoPrato = string.Empty;
+            _quantidadeDePratos = _pratosPrincipais.Count + _pratosPensados.Count;
+            _ehDerivado = false;
+            _ehFimDeJogo = false;
+            _numeroPratoAtual = _pratosPensados.Count > 0 ? 1 : 0;
 
-            foreach (var pratos in _pratosPensados)
+            foreach (var pratos in _pratosPrincipais)
             {
-                if (_textMessages.QuestionMessage(pratos.Tipo).Equals(DialogResult.Yes))
+                if (!_ehFimDeJogo)
                 {
-                    foreach (var prato in pratos.Prato)
+                    TratarPerguntas(pratos);
+                    _numeroPratoAtual++;
+                }
+            }
+        }
+
+        private void TratarPerguntas(Pratos pratos)
+        {
+            if (pratos.Prato == null)
+            {
+                _numeroPratoAtual++;
+
+                if (_numeroPratoAtual < _quantidadeDePratos)
+                    _numeroPratoAtual = _quantidadeDePratos;
+
+                if (_ehDerivado.Equals(pratos.EhDerivado) && _numeroPratoAtual.Equals(_quantidadeDePratos))
+                {
+                    if (_textMessages.QuestionMessage(pratos.Tipo).Equals(DialogResult.Yes))
                     {
-                        ultimoPrato = prato;
-                        if (_textMessages.QuestionMessage(prato).Equals(DialogResult.Yes))
+                        _textMessages.InformationMessage();
+                        _ehFimDeJogo = true;
+                        return;
+                    }
+
+                    if (_numeroPratoAtual.Equals(_quantidadeDePratos) && !_ehFimDeJogo)
+                        PerguntarPratoPensado(pratos.Tipo);
+
+                    return;
+                }
+
+                if (!_ehFimDeJogo)
+                    PerguntarPratoPensado(_ultimoPrato);
+
+                return;
+            }
+
+            if (_textMessages.QuestionMessage(pratos.Tipo).Equals(DialogResult.Yes))
+            {
+                _ehDerivado = true;
+                _qtdPratosPenDerivados = _pratosPensados.Where(p => p.EhDerivado.Equals(true)).Sum(p => p.Prato.Count);
+
+                if (_pratosPensados.Any())
+                    Perguntar(_pratosPensados);
+
+                if (!_ehFimDeJogo)
+                    Perguntar(pratos);
+            }
+            else
+            {
+                _qtdPratosPenDerivados = _pratosPensados.Where(p => p.EhDerivado.Equals(false)).Sum(p => p.Prato.Count);
+                if (_pratosPensados.Any())
+                    Perguntar(_pratosPensados);
+
+                return;
+            }
+
+            if (_numeroPratoAtual.Equals(_quantidadeDePratos) && !_ehFimDeJogo)
+            {
+                PerguntarPratoPensado(_ultimoPrato != string.Empty ? _ultimoPrato :
+                                      _pratosPrincipais.LastOrDefault(p => p.Tipo == pratos.Tipo).Tipo);
+            }
+        }
+
+        private void Perguntar(Pratos pratos)
+        {
+            var pratoDerivado = _ehDerivado ? 0 : 1;
+
+            foreach (var prato in pratos.Prato)
+            {
+                _numeroPratoAtual++;
+                _ultimoPrato = prato;
+
+                if (_ehDerivado.Equals(pratos.EhDerivado))
+                {
+                    pratoDerivado++;
+                    if (_textMessages.QuestionMessage(prato).Equals(DialogResult.Yes))
+                    {
+                        _textMessages.InformationMessage();
+                        _ehFimDeJogo = true;
+                        return;
+                    }
+                    else
+                    {
+                        if (pratoDerivado >= _qtdPratosPenDerivados && !_ehDerivado)
+                            _qtdPratosPenDerivados++;
+
+                        if (pratoDerivado.Equals(_qtdPratosPenDerivados) && !_ehFimDeJogo)
                         {
-                            _textMessages.InformationMessage();
+                            PerguntarPratoPensado(_ultimoPrato);
+                            _ehFimDeJogo = true;
                             return;
                         }
-                        else
-                            numeroPratoAtual = quantidadeDePratos;
                     }
                 }
-
-                if (numeroPratoAtual.Equals(quantidadeDePratos))
-                {
-                    PerguntarPratoPensado(ultimoPrato != string.Empty ? ultimoPrato :
-                                          _pratosPensados.FirstOrDefault(p => p.Tipo == pratos.Tipo).Prato.LastOrDefault());
+                else
                     break;
-                }
+            }
+        }
 
-                numeroPratoAtual++;
+        private void Perguntar(List<Pratos> pratosPensados)
+        {
+            try
+            {
+                foreach (var pratos in pratosPensados)
+                {
+                    if (_ehDerivado.Equals(pratos.EhDerivado) && !_ehFimDeJogo)
+                    {
+                        if (_textMessages.QuestionMessage(pratos.Tipo).Equals(DialogResult.Yes))
+                            Perguntar(pratos);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                _ehFimDeJogo = true;
             }
         }
 
@@ -76,11 +184,14 @@ namespace JogoGourmet.Business
 
         private void AdicionarNovoPratoPensado(string novoTipo, string novoPrato)
         {
-            var prato = new Pratos() { Tipo = novoTipo, Prato = new List<string>() { novoPrato } };
+            var prato = new Pratos() { Tipo = novoTipo, Prato = new List<string>() { novoPrato }, EhDerivado = _ehDerivado };
             var indice = _pratosPensados.FindIndex(p => p.Tipo.Equals(prato.Tipo));
 
             if (indice > -1)
+            {
                 _pratosPensados[indice].Prato.Add(novoPrato);
+                _pratosPensados[indice].EhDerivado = _ehDerivado;
+            }
             else
                 _pratosPensados.Add(prato);
         }

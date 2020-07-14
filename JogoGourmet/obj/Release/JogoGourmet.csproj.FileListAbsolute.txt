@@ -11,3 +11,4 @@ C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.csproj.Cor
 C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.csproj.CopyComplete
 C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.exe
 C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.pdb
+C:\Users\jefte\GitHub\JogoGourmet\JogoGourmet\obj\Release\JogoGourmet.csprojAssemblyReference.cache

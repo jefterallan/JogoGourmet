@@ -19,9 +19,9 @@ namespace JogoGourmet.Business.Commons
             return MessageBox.Show($"O prato que você pensou é {message}?", "Jogo Gourmet", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1);
         }
 
-        public DialogResult WarningMessage(string message)
+        public DialogResult WarningMessage()
         {
-            return MessageBox.Show(message, "Jogo Gourmet", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            return MessageBox.Show("O campo nao pode ser vazio, cancelando prato novo!", "Jogo Gourmet", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         public DialogResult ErrorMessage(string message)
